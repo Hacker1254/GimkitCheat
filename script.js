@@ -9,11 +9,11 @@ class multiple_choice {
   }
 
   static answer(text, answers = []){
-    if(!savedText.includes(text)){
+    if(!MC.savedText.includes(text)){
       multiple_choice.addQuestion(text, [], [], answers);
     }
     
-    var question = savedAnswers[savedText.indexOf(text)];
+    var question = MC.savedAnswers[MC.savedText.indexOf(text)];
 
     if(answers.length == 0){
       answers = answers.concat(question.correctAnswers).concat(question.unknownAnswers).concat(question.incorrectAnswers);
@@ -39,9 +39,9 @@ class multiple_choice {
   }
 
   static addQuestion(text, answers = [], wrong = [], unknown = []){
-    savedText.push(text);
+    MC.savedText.push(text);
     var obj = new multiple_choice(answers, wrong, unknown);
-    savedAnswers.push(obj);
+    MC.savedAnswers.push(obj);
   }
 
   static modifyAnswers(question, newRight = [], newWrong = [], newUnknown = []) {
@@ -98,17 +98,17 @@ class text_response {
   }
 
   static answer(text){
-    if(!savedText.includes(text)){
+    if(!TR.savedText.includes(text)){
       text_response.addQuestion(text);
     }
-    var question = savedAnswers[savedText.indexOf(text)];
+    var question = TR.savedAnswers[TR.savedText.indexOf(text)];
     return question.answer;
   }
 
   static addQuestion(text, answer = ""){
-    savedText.push(text);
+    TR.savedText.push(text);
     var obj = new text_response(answer);
-    savedAnswers.push(obj);
+    TR.savedAnswers.push(obj);
   }
 
   static modifyAnswers(question, right){
@@ -175,16 +175,16 @@ function update(){
   if(question.type == "multiple_choice"){
 
     if(result){
-      multiple_choice.modifyAnswers(savedAnswers[savedText.indexOf(question.text)], [selected_answer],[],[]);
+      multiple_choice.modifyAnswers(MC.savedAnswers[MC.savedText.indexOf(question.text)], [selected_answer],[],[]);
     } else {
-      multiple_choice.modifyAnswers(savedAnswers[savedText.indexOf(question.text)], [],[selected_answer],[]);
+      multiple_choice.modifyAnswers(MC.savedAnswers[MC.savedText.indexOf(question.text)], [],[selected_answer],[]);
     }
 
-    multiple_choice.modifyAnswers(savedAnswers[savedText.indexOf(question.text)], [], [], question.answer_options.splice(question.answer_options.indexOf(selected_answer), 1));
+    multiple_choice.modifyAnswers(MC.savedAnswers[MC.savedText.indexOf(question.text)], [], [], question.answer_options.splice(question.answer_options.indexOf(selected_answer), 1));
 
   } else {
     if(result) {
-      text_response.modifyAnswers(savedAnswers[savedText.indexOf(question.text)], selected_answer);
+      text_response.modifyAnswers(TR.savedAnswers[TR.savedText.indexOf(question.text)], selected_answer);
     }
   }
 
@@ -216,8 +216,15 @@ function wasAnswerRight() {
 
 }
 
-var savedText = [];
-var savedAnswers = [];
+var MC = {
+  savedText: [],
+  savedAnswers: []
+}
+
+var TR = {
+  savedText: [],
+  savedAnswers: []
+}
 
 var CURRENTQUESTION = null;
 var CURRENTANSWER = null;
