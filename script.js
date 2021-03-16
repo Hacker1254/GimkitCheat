@@ -1,13 +1,11 @@
 /*jshint esversion: 6 */
 class multiple_choice {
-
-
   constructor(right = [], wrong = [], unknown = []){
     this.correctAnswers = right;
     this.unknownAnswers = unknown;
     this.incorrectAnswers = wrong;
   }
-
+  
   static answer(text, answers = []){
     if(!MC.savedText.includes(text)){
       multiple_choice.addQuestion(text, [], [], answers);
@@ -92,7 +90,7 @@ class multiple_choice {
 
 }
 
-class text_response {
+class text_responce {
   constructor(right = ""){
     this.answer = right;
   }
@@ -109,6 +107,7 @@ class text_response {
     TR.savedText.push(text);
     var obj = new text_response(answer);
     TR.savedAnswers.push(obj);
+
   }
 
   static modifyAnswers(question, right){
@@ -116,29 +115,7 @@ class text_response {
   }
 
   static setUp() {
-    document.forms[0].children[0].addEventListener('change', (e) => {CURRENTANSWER = e.srcElement.value;});
-    questionObserver();
-  }
-
-  static displayAnswers(value) {
-    document.getElementsByClassName("sc-gBGeja eYKMSX")[0].textContent = value;
-    if(value == "") {
-      document.getElementsByClassName("sc-gBGeja eYKMSX")[0].style.backgroundColor = "#777777";
-    } else {
-      document.getElementsByClassName("sc-gBGeja eYKMSX")[0].style.backgroundColor = "#00aa00";
-      var OVERWRITE = true;
-      if (OVERWRITE) {
-        var el = document.createElement('textarea');
-        el.value = value;
-        el.setAttribute('readonly', '');
-        el.style.position = 'absolute';
-        el.style.left = '-9999px';
-        document.body.appendChild(el);
-        el.select();
-        document.execCommand('copy');
-        document.body.removeChild(el);
-      }
-    }
+    document.getElementsByClassName("sc-gBGeja eYKMSX")[0].addEventListener("click", () => {CURRENTQUESTION = document.getElementsByClassName("sc-bEGMXy lnqrzS")[0].value;});
   }
 
 }
@@ -156,7 +133,7 @@ function get_question() {
       answers.push(document.getElementsByClassName("notranslate lang-en")[i].textContent);
     }
   } else {
-    question_type = "text_response";
+    question_type = "text_responce";
   }
 
   var values = {
@@ -173,7 +150,6 @@ function update(){
   var result = RESULT;
 
   if(question.type == "multiple_choice"){
-
     if(result){
       multiple_choice.modifyAnswers(MC.savedAnswers[MC.savedText.indexOf(question.text)], [selected_answer],[],[]);
     } else {
@@ -186,6 +162,7 @@ function update(){
     if(result) {
       text_response.modifyAnswers(TR.savedAnswers[TR.savedText.indexOf(question.text)], selected_answer);
     }
+
   }
 
 }
@@ -202,7 +179,7 @@ function questionObserver() {
     });
     observer.observe(document.getElementsByClassName("sc-HWglP dnSgUS")[0].children[0], {attributes:true, childList:true});
   });
-  observer.observe(document.getElementsByClassName("sc-HWglP dnSgUS")[0].children[0], {attributes:true, childList:true});
+  observer.observe(document.getElementsByClassName("sc-HWglP dnSgUS")[0].children[0], {attributes:true, childList:true, subtree:true});
 }
 
 function wasAnswerRight() {
@@ -230,21 +207,13 @@ var CURRENTQUESTION = null;
 var CURRENTANSWER = null;
 var RESULT = null;
 
-//var observer = null;
-
 function start() {
   document.addEventListener("keydown", (e)=>{
-    if(e.keyCode == 27) {
+    if(e.keyCode == 9) {
       CURRENTQUESTION = get_question();
-      if(CURRENTQUESTION.type == "multiple_choice") {
-        multiple_choice.setUp();
-        var eval = multiple_choice.answer(CURRENTQUESTION.text, CURRENTQUESTION.answer_options);
-        multiple_choice.displayAnswers(eval);
-      } else {
-        text_response.setUp();
-        var eval = text_response.answer(CURRENTQUESTION.text);
-        text_response.displayAnswers(eval);
-      }
+      multiple_choice.setUp();
+      var eval = multiple_choice.answer(CURRENTQUESTION.text, CURRENTQUESTION.answer_options);
+      multiple_choice.displayAnswers(eval);
     }
   });
 }
