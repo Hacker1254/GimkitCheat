@@ -219,12 +219,12 @@ function wasAnswerRight() {
 var MC = {
   savedText: [],
   savedAnswers: []
-}
+};
 
 var TR = {
   savedText: [],
   savedAnswers: []
-}
+};
 
 var CURRENTQUESTION = null;
 var CURRENTANSWER = null;
