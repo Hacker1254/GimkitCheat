@@ -27,3 +27,11 @@ Red) You have choosen this before and the answer was wrong
 
 Grey) You have not choosen this before and it is not recorded if it was right or not (ALL ANSWERS WILL BE GREY IF THE QUESTION HAS NOT BEEN SEEN BEFORE)
   ![image](https://user-images.githubusercontent.com/58855590/111369629-aacc3900-866d-11eb-87e4-61a86918757d.png)
+
+
+
+# (potential) FUTURE FEATURES
+  -  Function for text response answers
+  -  Export and import data
+  -  Remove need for pressing tab
+  -  Automatically answering questions
