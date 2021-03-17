@@ -213,29 +213,116 @@ function wasAnswerRight() {
   } else {
     return false;
   }
-
 }
 
-//MC.
+function join(data) {
+  console.log(data);
+  if(data.choice_data.savedText.length != undefined) {
+    var multiple_choice_questions = data.choice_data.savedText;
+    var multiple_choice_answers = data.choice_data.savedAnswers;
+    for(var i = 0; i < multiple_choice_questions.length; i++) {
+      var question_text = multiple_choice_questions[i];
+      var answer_options = multiple_choice_answers[i];
+      if(MC.savedText.length != 0) {
+        if(MC.savedText.includes(question_text)) {
+          multiple_choice.modifyAnswers(MC.savedAnswers[MC.savedText.indexOf(question_text)], answer_options.correctAnswers, answer_options.incorrectAnswers, answer_options.unknownAnswers);
+        } else {
+          multiple_choice.addQuestion(question_text, answer_options.correctAnswers, answer_options.incorrectAnswers, answer_options.unknownAnswers);
+        }
+      } else {
+        multiple_choice.addQuestion(question_text, answer_options.correctAnswers, answer_options.incorrectAnswers, answer_options.unknownAnswers);
+      }
+    }
+  }
+  if(data.text_data.savedText.length != undefined) {
+    var text_data_questions = data.text_data.savedText;
+    var text_data_answers = data.text_data.savedAnswers;
+    for(var i = 0; i < text_data_questions.length; i++) {
+      var question_text = text_data_questions[i];
+      var answer_text = text_data_answers[i].answer;
+      if(TR.savedText.length != 0) {
+        if(TR.savedText.includes(question_text)) {
+          var user_question_version = TR.savedText.indexOf(question_text);
+          if(TR.savedAnswers[user_question_version] == "") {
+            text_response.modifyAnswers(question_text, answer_text);
+          }
+        } else {
+          text_response.addQuestion(question_text, answer_text);
+        }
+      } else {
+        text_response.addQuestion(question_text, answer_text);
+      }
+    }
+  }
+}
+
+function save(exportName = "Gimkit.data") {
+  var dataLink = document.createElement("a");
+  var text = JSON.stringify({text_data:TR,choice_data:MC});
+  var data = new Blob([text], {type: 'text/plain'});
+  dataLink.setAttribute("download", exportName);
+  var url = window.URL.createObjectURL(data);
+  dataLink.href = url;
+  dataLink.click();
+}
+
+function load(el) {
+  if(el.files.length != 0) {
+    var fr = new FileReader();
+    fr.onload = () =>{
+      join(JSON.parse(fr.result));
+    };
+    fr.readAsText(el.files[0]);
+  }
+}
+
 var MC = {
   savedText: [],
   savedAnswers: []
-}
-// TR.
+};
 var TR = {
   savedText: [],
   savedAnswers: []
-}
+};
+
+var TOGGLESAVE = false;
 
 var CURRENTQUESTION = null;
 var CURRENTANSWER = null;
 var RESULT = null;
 
-//var observer = null;
+
 
 function start() {
   document.addEventListener("keydown", (e)=>{
     if(e.keyCode == 27) {
+      if(!TOGGLESAVE) {
+        TOGGLESAVE = true;
+        var saveEl = document.createElement("input");
+        saveEl.style.backgroundColor = "#000000";
+
+        saveEl.setAttribute("type", "button");
+        saveEl.setAttribute("value","Save");
+        saveEl.addEventListener("click", ()=> {save(prompt("Filename", "Gimkit.data"));});
+
+        var bar = document.getElementsByClassName("sc-cNWTVD kflTld")[0];
+        bar.appendChild(saveEl);
+        bar.insertBefore(saveEl, bar.children[bar.children.length-2]);
+
+
+
+        var loadEl = document.createElement("input");
+
+        loadEl.style.color = "transparent";
+        loadEl.setAttribute("type", "file");
+        
+        loadEl.addEventListener("input", () => {
+          load(loadEl);
+        });
+
+        bar.appendChild(loadEl);
+        bar.insertBefore(loadEl, bar.children[bar.children.length-2]);
+      }
       CURRENTQUESTION = get_question();
       if(CURRENTQUESTION.type == "multiple_choice") {
         multiple_choice.setUp();
@@ -246,6 +333,9 @@ function start() {
         var eval = text_response.answer(CURRENTQUESTION.text);
         text_response.displayAnswers(eval);
       }
+    }
+    if(e.keyCode == 17 && e.location == 2) {
+      save();
     }
   });
 }
