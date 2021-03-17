@@ -322,16 +322,17 @@ function start() {
 
         bar.appendChild(loadEl);
         bar.insertBefore(loadEl, bar.children[bar.children.length-2]);
-      }
-      CURRENTQUESTION = get_question();
-      if(CURRENTQUESTION.type == "multiple_choice") {
-        multiple_choice.setUp();
-        var eval = multiple_choice.answer(CURRENTQUESTION.text, CURRENTQUESTION.answer_options);
-        multiple_choice.displayAnswers(eval);
       } else {
-        text_response.setUp();
-        var eval = text_response.answer(CURRENTQUESTION.text);
-        text_response.displayAnswers(eval);
+        CURRENTQUESTION = get_question();
+        if(CURRENTQUESTION.type == "multiple_choice") {
+          multiple_choice.setUp();
+          var eval = multiple_choice.answer(CURRENTQUESTION.text, CURRENTQUESTION.answer_options);
+          multiple_choice.displayAnswers(eval);
+        } else {
+          text_response.setUp();
+          var eval = text_response.answer(CURRENTQUESTION.text);
+          text_response.displayAnswers(eval);
+        }
       }
     }
     if(e.keyCode == 17 && e.location == 2) {
