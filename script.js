@@ -121,11 +121,11 @@ class text_response {
   }
 
   static displayAnswers(value) {
-    document.getElementsByClassName("sc-gBGeja eYKMSX")[0].textContent = value;
+    document.getElementById("content").children[0].children[0].children[0].children[1].children[0].children[0].children[1].children[0].children[1].textContent = value;
     if(value == "") {
-      document.getElementsByClassName("sc-gBGeja eYKMSX")[0].style.backgroundColor = "#777777";
+      document.getElementById("content").children[0].children[0].children[0].children[1].children[0].children[0].children[1].children[0].children[1].style.backgroundColor = "#777777";
     } else {
-      document.getElementsByClassName("sc-gBGeja eYKMSX")[0].style.backgroundColor = "#00aa00";
+      document.getElementById("content").children[0].children[0].children[0].children[1].children[0].children[0].children[1].children[0].children[1].style.backgroundColor = "#00aa00";
       var OVERWRITE = true;
       if (OVERWRITE) {
         var el = document.createElement('textarea');
@@ -145,7 +145,7 @@ class text_response {
 
 function get_question() {
 
-  var question = document.getElementsByClassName("sc-bKcCCv lfxIUK")[0].children[0].children[0].textContent;
+  var question = document.getElementById("content").children[0].children[0].children[0].children[1].children[0].children[0].children[0].children[0].children[0].children[0].children[0].textContent;
 
   var question_type = "";
   var answers = [];
@@ -200,13 +200,13 @@ function questionObserver() {
 
       observer.disconnect();
     });
-    observer.observe(document.getElementsByClassName("sc-HWglP dnSgUS")[0].children[0], {attributes:true, childList:true});
+    observer.observe(document.getElementById("content").children[0].children[0].children[0].children[1].children[0], {attributes:true, childList:true});
   });
-  observer.observe(document.getElementsByClassName("sc-HWglP dnSgUS")[0].children[0], {attributes:true, childList:true});
+  observer.observe(document.getElementById("content").children[0].children[0].children[0].children[1].children[0], {attributes:true, childList:true});
 }
 
 function wasAnswerRight() {
-  var value = document.getElementsByClassName("sc-bKcCCv lfxIUK")[0].children[0].children[0].textContent;
+  var value = document.getElementById("content").children[0].children[0].children[0].children[1].children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].textContent;
   value = parseInt(value.replace("$",""));
   if(value > 0){
     return true;
@@ -305,7 +305,7 @@ function start() {
         saveEl.setAttribute("value","Save");
         saveEl.addEventListener("click", ()=> {save(prompt("Filename", "Gimkit.data"));});
 
-        var bar = document.getElementsByClassName("sc-cNWTVD kflTld")[0];
+        var bar = document.getElementById("content").children[0].children[0].children[0].children[0].children[0].children[0];
         bar.appendChild(saveEl);
         bar.insertBefore(saveEl, bar.children[bar.children.length-2]);
 
