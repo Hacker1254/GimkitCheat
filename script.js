@@ -1,7 +1,5 @@
 /*jshint esversion: 6 */
 class multiple_choice {
-
-
   constructor(right = [], wrong = [], unknown = []){
     this.correctAnswers = right;
     this.unknownAnswers = unknown;
@@ -145,7 +143,13 @@ class text_response {
 
 function get_question() {
 
-  var question = document.getElementById("content").children[0].children[0].children[0].children[1].children[0].children[0].children[0].children[0].children[0].children[0].children[0].textContent;
+  var temp = document.getElementById("content").children[0].children[0].children[0].children[1].children[0].children[0].children[0].children[0].children[0];
+
+  if(temp.children.length > 1) {
+    var question = temp.children[1].textContent;
+  } else {
+    var question = temp.children[0].textContent;
+  }
 
   var question_type = "";
   var answers = [];
